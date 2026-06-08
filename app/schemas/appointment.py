@@ -22,6 +22,7 @@ class AppointmentRead(SQLModel):
     appointment_time: datetime
     status: str
     doctor_id: UUID
+    doctor_name: Optional[str]
     notes: Optional[str]
     created_at: datetime
 
@@ -32,5 +33,6 @@ class AppointmentUpdate(SQLModel):
     patient_phone: Optional[str] = None
     appointment_time: Optional[datetime] = None
     status: Optional[str] = None
+    doctor_name: Optional[str] = None
     notes: Optional[str] = None
 

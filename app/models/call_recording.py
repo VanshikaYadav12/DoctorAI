@@ -10,14 +10,13 @@ class CallRecording(SQLModel, table=True):
 
     id: UUID = Field(
         default_factory=uuid.uuid4,
-        primary_key=True
+        primary_key=True,
+        index=True
     )
 
-    call_sid: str
+    call_sid: str = Field(index=True)
 
     recording_url: str
-
-    transcript: str | None = None
 
     created_at: datetime = Field(
         default_factory=datetime.utcnow

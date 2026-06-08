@@ -42,6 +42,7 @@ def create_appointment(
         patient_phone=appointment.patient_phone,
         appointment_time=appointment.appointment_time,
         doctor_id=appointment.doctor_id,
+        doctor_name=doctor.name,
         notes=appointment.notes
     )
 

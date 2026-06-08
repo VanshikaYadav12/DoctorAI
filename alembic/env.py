@@ -7,12 +7,19 @@ from app.models.doctor import Doctor
 from app.models.appointments import Appointment
 from app.models.call_logs import CallLog
 from app.models.call_recording import CallRecording
-from app.models.call_transcript import CallConversation
+from app.models.call_transcript import CallConversation, CallTranscript
+from app.core.config import DATABASE_URL
 from alembic import context
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
+
+if DATABASE_URL:
+    config.set_main_option(
+        "sqlalchemy.url",
+        DATABASE_URL
+    )
 
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.

@@ -29,6 +29,8 @@ class Appointment(SQLModel, table=True):
         foreign_key="doctors.id"
     )
 
+    doctor_name: Optional[str] = None
+
     created_at: datetime = Field(
         default_factory=datetime.utcnow
     )
