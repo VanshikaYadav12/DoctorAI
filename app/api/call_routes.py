@@ -443,6 +443,14 @@ async def process_speech(request: Request):
 
         step = state.get("step")
 
+# Debugging logs
+        print("\n" + "=" * 60)
+        print("CALL SID:", call_sid)
+        print("CURRENT STEP:", step)
+        print("USER SAID:", user_speech)
+        print("STATE:", state)
+        print("=" * 60 + "\n")
+
         if step == "detect_department":
             department = detect_department(user_speech)
 
@@ -533,6 +541,13 @@ async def process_speech(request: Request):
             )
 
         if step == "confirm_patient_name":
+
+            # Debugging logs
+            print("INSIDE confirm_patient_name")
+            print("USER RESPONSE:", user_speech)
+            print("IS YES:", is_yes(user_speech))
+            print("IS NO:", is_no(user_speech))
+
             if is_yes(user_speech):
                 doctor = session.get(
                     Doctor,
@@ -572,7 +587,8 @@ async def process_speech(request: Request):
 
                 return final_response(
                     call_sid,
-                    "Your appointment has been booked successfully.",
+                    "Your appointment has been booked successfully."
+                    "Take care and goodbye!", 
                     session
                 )
 
@@ -786,30 +802,37 @@ async def process_speech(request: Request):
             )
 
         if step == "confirm_time_slot":
-            if is_no(user_speech):
-                state["step"] = "choose_time"
+
+            # Debugging logs
+                print("INSIDE confirm_time_slot")
+                print("USER RESPONSE:", user_speech)
+                print("IS YES:", is_yes(user_speech))
+                print("IS NO:", is_no(user_speech))
+
+                if is_no(user_speech):
+                    state["step"] = "choose_time"
+
+                    return gather_response(
+                        call_sid,
+                        "No problem. Please tell me another date and time.",
+                        session
+                    )
+
+                if not is_yes(user_speech):
+                    return gather_response(
+                        call_sid,
+                        "Please say yes to confirm this time slot, "
+                        "or no to choose another time.",
+                        session
+                )
+
+                state["step"] = "collect_patient_name"
 
                 return gather_response(
                     call_sid,
-                    "No problem. Please tell me another date and time.",
+                    "Please tell me your full name.",
                     session
                 )
-
-            if not is_yes(user_speech):
-                return gather_response(
-                    call_sid,
-                    "Please say yes to confirm this time slot, "
-                    "or no to choose another time.",
-                    session
-                )
-
-            state["step"] = "collect_patient_name"
-
-            return gather_response(
-                call_sid,
-                "Please tell me your full name.",
-                session
-            )
 
         set_call_state(
             call_sid,
